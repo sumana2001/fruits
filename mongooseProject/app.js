@@ -3,8 +3,15 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/fruitsDB', {useNewUrlParser: true, useUnifiedTopology: true});
 
 const fruitSchema = new mongoose.Schema({
-    name: String,
-    rating: Number,
+    name: {
+        type: String,
+        required: [true,"Enter a name!"]
+    },
+    rating: {
+        type: Number,
+        min: 1,
+        max: 10
+    },
     review: String
 });
 
@@ -30,7 +37,7 @@ const person = new Person({
     age: 19
 })
 
-person.save();
+//person.save();
 
 const kiwi = new Fruit({
     name: "kiwi",
@@ -64,10 +71,36 @@ Fruit.find(function(err, fruits){
         console.log(err);
     }
     else{
-        mongoose.connection.close();
         fruits.forEach(function(fruit){
             console.log(fruit.name);
 
         })
     }
 });
+
+Fruit.updateOne({id: "5ff86ce2f5400e225cc1404a"}, {name: "Peach"}, function(err){
+    if(err){
+        console.log(err);
+    }
+    else{
+        console.log("Successful");
+    }
+})
+
+/* Fruit.deleteOne({name: "Apple"}, function(err){
+    if(err){
+        console.log(err);
+    }
+    else{
+        console.log("Deleted");
+    }
+}) */
+
+Person.deleteMany({name: "Aniket"}, function(err){
+    if(err){
+        console.log(err);
+    }
+    else{
+        console.log("Deleted");
+    }
+})
